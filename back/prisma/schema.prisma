@@ -15,11 +15,20 @@ datasource db {
 
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   name     String
   telefone String?
   password String
+  produtos Product[]
 
   @@map("usuarios")
+}
+
+model Product {
+  id          String @id @default(uuid())
+  vendedor_id String
+  vendedor    User   @relation(fields: [vendedor_id], references: [id])
+
+  @@map("produtos")
 }
