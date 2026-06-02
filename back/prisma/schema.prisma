@@ -25,10 +25,23 @@ model User {
   @@map("usuarios")
 }
 
+model Category {
+  id       String    @id @default(uuid())
+  nome     String
+  produtos Product[]
+
+  @@map("categorias")
+}
+
 model Product {
   id          String @id @default(uuid())
   vendedor_id String
+  categoria_id String
+  titulo      String
+  descricao   String
+  preco       Decimal 
   vendedor    User   @relation(fields: [vendedor_id], references: [id])
-  
+  categoria   Category @relation(fields: [categoria_id], references: [id])
+
   @@map("produtos")
 }
