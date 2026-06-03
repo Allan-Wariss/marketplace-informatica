@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
 import { ProductModule } from 'src/product/product.module';
+import { CarrinhoModule } from 'src/carrinho/carrinho.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ProductModule } from 'src/product/product.module';
     UsersModule,
     AuthModule,
     CategoryModule,
-    ProductModule
+    ProductModule,
+    CarrinhoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
