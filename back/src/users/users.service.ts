@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { hashMd5 } from 'src/app/utils/hash.util';
 
 @Injectable()
 export class UsersService {
@@ -21,8 +22,12 @@ export class UsersService {
 
     const { telefone, ...data } = createUserDto;
     return await this.prisma.user.create({
-      data: { id: randomUUID(), ...createUserDto, telefone: createUserDto.telefone || undefined }
+      data: { id: randomUUID(), ...createUserDto, password: hashMd5(createUserDto.password), telefone: createUserDto.telefone || undefined }
     });
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.user.findFirst({ where: { email } });
   }
 
   findAll() {
