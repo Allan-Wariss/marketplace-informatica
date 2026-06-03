@@ -27,15 +27,39 @@ export class CategoryService {
     return this.prisma.category.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(nome: string) {
+    const categories = await this.prisma.category.findMany({
+      where: { nome: { contains: nome } },
+    });
+
+    if (categories.length === 0) {
+      throw new HttpException('Nenhuma categoria encontrada!', HttpStatus.NOT_FOUND);
+    }
+
+    return categories;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.prisma.category.findFirst({ where: { id } });
+
+    if (!category) {
+      throw new HttpException('Categoria não encontrada!', HttpStatus.NOT_FOUND);
+    }
+
+    return await this.prisma.category.update({
+      where: { id },
+      data: { ...updateCategoryDto },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const category = await this.prisma.category.findFirst({ where: { id } });
+
+    if (!category) {
+      throw new HttpException('Categoria não encontrada!', HttpStatus.NOT_FOUND);
+    }
+
+    await this.prisma.category.delete({ where: { id } });
+    return { message: 'Categoria removida com sucesso!' };
   }
 }
