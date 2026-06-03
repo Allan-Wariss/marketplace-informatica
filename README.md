@@ -88,6 +88,35 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Documentação da API (Swagger)
+
+Com o servidor rodando, acesse a documentação interativa em:
+
+```
+http://localhost:3000/swagger
+```
+
+A documentação lista todos os endpoints organizados por módulo:
+
+| Módulo | Tag | Descrição |
+|--------|-----|-----------|
+| Autenticação | `Auth` | Login e logout |
+| Usuários | `Users` | Cadastro e gerenciamento de usuários |
+| Categorias | `Category` | CRUD de categorias |
+| Produtos | `Product` | CRUD de produtos |... Etc
+
+### Como testar rotas protegidas no Swagger
+
+1. Faça login em `POST /auth/login` com seu e-mail e senha
+2. Copie o `access_token` retornado
+3. Clique no botão **Authorize** (cadeado) no topo da página
+4. Cole o token no campo e clique em **Authorize**
+5. Agora todas as requisições incluirão o token automaticamente
+
+> Rotas públicas (não precisam de token): `POST /users`, `GET /product`, `GET /product/search/:titulo`, `GET /category`, `GET /category/search/:nome`, `POST /auth/login`
+
+
+
 ## Testes
 
 ```bash
