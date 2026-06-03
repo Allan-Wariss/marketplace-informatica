@@ -14,6 +14,7 @@ datasource db {
 }
 
 
+
 model User {
   id       String    @id @default(uuid())
   email    String    @unique
@@ -21,7 +22,8 @@ model User {
   telefone String?
   password String
   produtos Product[]
-  pedidos   Pedido[]
+  pedidos  Pedido[]
+  carrinho Carrinho?
 
   @@map("usuarios")
 }
@@ -35,41 +37,52 @@ model Category {
 }
 
 model Product {
-  id          String @id @default(uuid())
-  vendedor_id String
+  id           String         @id @default(uuid())
+  vendedor_id  String
   categoria_id String
-  titulo      String
-  descricao   String
-  preco       Decimal 
-  disponivel   Boolean @default(true)
-  vendedor    User   @relation(fields: [vendedor_id], references: [id])
-  categoria   Category @relation(fields: [categoria_id], references: [id])
+  titulo       String
+  descricao    String
+  preco        Decimal
+  disponivel   Boolean        @default(true)
+  vendedor     User           @relation(fields: [vendedor_id], references: [id])
+  categoria    Category       @relation(fields: [categoria_id], references: [id])
+  carrinhoItens CarrinhoItem[]
 
   @@map("produtos")
 }
 
 
 model Pedido {
-  id        String @id @default(uuid())
+  id           String   @id @default(uuid())
   comprador_id String
-  status Boolean @default(false) 
-  data_compra DateTime @default(now())
-  valor_total Decimal // mudar valor total para associar ao carrinho posteriormente 
-  comprador User @relation(fields: [comprador_id], references: [id])
-  
-
+  carrinho_id  String   @unique
+  finalizado   Boolean  @default(false)
+  data_compra  DateTime @default(now())
+  valor_total  Decimal
+  comprador    User     @relation(fields: [comprador_id], references: [id])
+  carrinho     Carrinho @relation(fields: [carrinho_id], references: [id])
 
   @@map("pedidos")
 }
 
+model Carrinho {
+  id          String         @id @default(uuid())
+  usuario_id  String         @unique
+  valor_total Decimal        @default(0)
+  usuario     User           @relation(fields: [usuario_id], references: [id])
+  itens       CarrinhoItem[]
+  pedido      Pedido?
 
+  @@map("carrinhos")
+}
 
+model CarrinhoItem {
+  id          String   @id @default(uuid())
+  carrinho_id String
+  produto_id  String
+  quantidade  Int      @default(1)
+  carrinho    Carrinho @relation(fields: [carrinho_id], references: [id])
+  produto     Product  @relation(fields: [produto_id], references: [id])
 
-
-
-
-
-
-
-
-
+  @@map("carrinho_itens")
+}
