@@ -81,7 +81,9 @@ A documentação lista todos os endpoints organizados por módulo:
 | Autenticação | `Auth` | Login e logout |
 | Usuários | `Users` | Cadastro e gerenciamento de usuários |
 | Categorias | `Category` | CRUD de categorias |
-| Produtos | `Product` | CRUD de produtos |... Etc
+| Produtos | `Product` | CRUD de produtos |
+| Carrinho | `Carrinho` | Gerenciar carrinho de compras |
+| Pedido | `Pedido` | Finalizar compra e consultar pedidos |
 
 ### Como testar rotas protegidas no Swagger
 

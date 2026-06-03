@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Request } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { PedidoService } from './pedido.service';
-import { CreatePedidoDto } from './dto/create-pedido.dto';
-import { UpdatePedidoDto } from './dto/update-pedido.dto';
 
+@ApiTags('Pedido')
+@ApiBearerAuth()
 @Controller('pedido')
 export class PedidoController {
   constructor(private readonly pedidoService: PedidoService) {}
 
   @Post()
-  create(@Body() createPedidoDto: CreatePedidoDto) {
-    return this.pedidoService.create(createPedidoDto);
+  @ApiOperation({ summary: 'Finalizar compra — cria pedido a partir do carrinho e marca produtos como indisponíveis' })
+  criarPedido(@Request() req) {
+    return this.pedidoService.criarPedido(req.user.sub);
   }
 
   @Get()
-  findAll() {
-    return this.pedidoService.findAll();
+  @ApiOperation({ summary: 'Listar meus pedidos' })
+  getMeusPedidos(@Request() req) {
+    return this.pedidoService.getMeusPedidos(req.user.sub);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pedidoService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePedidoDto: UpdatePedidoDto) {
-    return this.pedidoService.update(+id, updatePedidoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pedidoService.remove(+id);
+  @ApiOperation({ summary: 'Ver detalhes de um pedido pelo ID' })
+  getPedido(@Param('id') id: string, @Request() req) {
+    return this.pedidoService.getPedido(id, req.user.sub);
   }
 }

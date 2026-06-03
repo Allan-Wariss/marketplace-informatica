@@ -9,6 +9,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
 import { ProductModule } from 'src/product/product.module';
 import { CarrinhoModule } from 'src/carrinho/carrinho.module';
+import { PedidoModule } from 'src/pedido/pedido.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CarrinhoModule } from 'src/carrinho/carrinho.module';
     CategoryModule,
     ProductModule,
     CarrinhoModule,
+    PedidoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
