@@ -3,9 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { CategoryModule } from 'src/category/category.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
+import { ProductModule } from 'src/product/product.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import KeyvRedis from '@keyv/redis';
     }),
     UsersModule,
     AuthModule,
+    CategoryModule,
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
