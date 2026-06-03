@@ -21,6 +21,7 @@ model User {
   telefone String?
   password String
   produtos Product[]
+  pedidos   Pedido[]
 
   @@map("usuarios")
 }
@@ -40,8 +41,35 @@ model Product {
   titulo      String
   descricao   String
   preco       Decimal 
+  disponivel   Boolean @default(true)
   vendedor    User   @relation(fields: [vendedor_id], references: [id])
   categoria   Category @relation(fields: [categoria_id], references: [id])
 
   @@map("produtos")
 }
+
+
+model Pedido {
+  id        String @id @default(uuid())
+  comprador_id String
+  status Boolean @default(false) 
+  data_compra DateTime @default(now())
+  valor_total Decimal // mudar valor total para associar ao carrinho posteriormente 
+  comprador User @relation(fields: [comprador_id], references: [id])
+  
+
+
+  @@map("pedidos")
+}
+
+
+
+
+
+
+
+
+
+
+
+
