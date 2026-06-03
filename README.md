@@ -25,6 +25,46 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Pré-requisitos
+
+- [Node.js](https://nodejs.org/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+## Variáveis de ambiente
+
+Crie o arquivo `back/.env` com base no exemplo abaixo:
+
+```env
+DATABASE_URL="file:./dev.db"
+
+JWT_SECRET=sua-chave-secreta-longa-e-segura
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+
+## Redis (Docker)
+
+O projeto utiliza Redis para armazenar sessões JWT. Inicie o container antes de rodar a aplicação:
+
+```bash
+# Iniciar o Redis
+docker run -d --name redis-marketplace -p 6379:6379 redis:alpine
+
+# Parar o Redis
+docker stop redis-marketplace
+
+# Iniciar novamente (após parar)
+docker start redis-marketplace
+
+# Ver logs
+docker logs redis-marketplace
+
+# Acessar o Redis CLI
+docker exec -it redis-marketplace redis-cli
+```
+
 ## Project setup
 
 ```bash
