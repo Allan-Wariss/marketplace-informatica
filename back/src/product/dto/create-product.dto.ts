@@ -12,4 +12,5 @@ export class CreateProductDto {
 
     @ApiProperty({ example: 3500.00, description: 'Preço do produto' })
     preco: number;
+  
 }
