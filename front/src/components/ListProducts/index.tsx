@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { useProducts } from "../../hooks/useProducts"
 import { formatPrice } from "../../utils/formatPrice"
+import { limitText } from "../../utils/limitText"
 import "./ListProducts.css"
 
 export const ListProducts = () => {
@@ -23,7 +24,7 @@ export const ListProducts = () => {
                                 <div className="product-card__image-icon" aria-hidden="true" />
                                 <span className="product-card__image-text">Imagem do produto</span>
                             </div>
-                            <p className="product-card__descricao">{product.descricao}</p>
+                            <p className="product-card__descricao">{limitText(product.descricao, 22)}</p>
                             <p className="product-card__categoria">{product.categoria?.nome}</p>
                             <p className="product-card__disponivel">{product.disponivel}</p>
                             <p className="product-card__vendedor"> Vendedor: {product?.vendedor?.name || ""}</p>
