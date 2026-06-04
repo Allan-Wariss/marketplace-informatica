@@ -8,7 +8,7 @@ export class PedidoService {
 
   async criarPedido(usuario_id: string) {
     const carrinho = await this.prisma.carrinho.findFirst({
-      where: { usuario_id },
+      where: { usuario_id, pedido: { is: null } },
       include: { itens: { include: { produto: true } } },
     });
 
@@ -18,14 +18,6 @@ export class PedidoService {
 
     if (carrinho.itens.length === 0) {
       throw new HttpException('Carrinho está vazio!', HttpStatus.BAD_REQUEST);
-    }
-
-    const pedidoExistente = await this.prisma.pedido.findFirst({
-      where: { carrinho_id: carrinho.id },
-    });
-
-    if (pedidoExistente) {
-      throw new HttpException('Este carrinho já foi finalizado em um pedido!', HttpStatus.BAD_REQUEST);
     }
 
     const indisponiveis = carrinho.itens.filter((item) => !item.produto.disponivel);
@@ -82,6 +74,29 @@ export class PedidoService {
             itens: {
               include: {
                 produto: { select: { id: true, titulo: true, preco: true } },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { data_compra: 'desc' },
+    });
+  }
+
+  async getHistorico(usuario_id: string) {
+    return this.prisma.pedido.findMany({
+      where: { comprador_id: usuario_id, finalizado: true },
+      include: {
+        carrinho: {
+          include: {
+            itens: {
+              include: {
+                produto: {
+                  include: {
+                    categoria: { select: { id: true, nome: true } },
+                    vendedor: { select: { id: true, name: true, email: true, telefone: true } },
+                  },
+                },
               },
             },
           },

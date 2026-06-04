@@ -23,7 +23,7 @@ model User {
   password String
   produtos Product[]
   pedidos  Pedido[]
-  carrinho Carrinho?
+  carrinhos Carrinho[]
 
   @@map("usuarios")
 }
@@ -69,7 +69,7 @@ model Pedido {
 
 model Carrinho {
   id          String         @id @default(uuid())
-  usuario_id  String         @unique
+  usuario_id  String
   valor_total Decimal        @default(0)
   usuario     User           @relation(fields: [usuario_id], references: [id])
   itens       CarrinhoItem[]

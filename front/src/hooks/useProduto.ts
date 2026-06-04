@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import ProductsApi from '../api/products/api'
+import CarrinhoApi from '../api/carrinho/api'
+import PedidoApi from '../api/pedido/api'
 import { useAuth } from './useAuth'
 import type { IProduct } from '../types/IProduct'
 import type { ICreateProductForm } from '../types/IProduct'
@@ -21,6 +23,10 @@ export const useProduto = () => {
 
     const [confirmandoDelete, setConfirmandoDelete] = useState(false)
     const [loadingDelete, setLoadingDelete] = useState(false)
+
+    const [loadingCarrinho, setLoadingCarrinho] = useState(false)
+    const [loadingCompra, setLoadingCompra] = useState(false)
+    const [confirmandoCompra, setConfirmandoCompra] = useState(false)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -112,12 +118,43 @@ export const useProduto = () => {
     }
 
     // --- Compra / Carrinho ---
-    const adicionarAoCarrinho = () => {
-        // TODO: implementar lógica de carrinho
+    const adicionarAoCarrinho = async () => {
+        if (!product || !user) { navigate('/login'); return }
+        setLoadingCarrinho(true)
+        try {
+            await CarrinhoApi.addItem(product.id)
+            toast.success('Adicionado ao carrinho!')
+        } catch (err: any) {
+            const msg = err?.response?.data?.message
+            toast.error(typeof msg === 'string' ? msg : 'Erro ao adicionar ao carrinho.')
+        } finally {
+            setLoadingCarrinho(false)
+        }
     }
 
     const comprar = () => {
-        // TODO: implementar lógica de compra
+        if (!user) { navigate('/login'); return }
+        setConfirmandoCompra(true)
+    }
+
+    const confirmarCompra = async () => {
+        if (!product || !user) return
+        setLoadingCompra(true)
+        try {
+            // Limpa o carrinho ativo antes de adicionar este produto,
+            // assim a compra direta não mistura com itens já salvos no carrinho.
+            await CarrinhoApi.limpar()
+            await CarrinhoApi.addItem(product.id)
+            await PedidoApi.criarPedido()
+            setProduct((prev) => prev ? { ...prev, disponivel: false } : prev)
+            setConfirmandoCompra(false)
+            toast.success('Compra realizada com sucesso!')
+        } catch (err: any) {
+            const msg = err?.response?.data?.message
+            toast.error(typeof msg === 'string' ? msg : 'Erro ao finalizar compra.')
+        } finally {
+            setLoadingCompra(false)
+        }
     }
 
     return {
@@ -137,7 +174,12 @@ export const useProduto = () => {
         setConfirmandoDelete,
         loadingDelete,
         handleDelete,
+        loadingCarrinho,
+        loadingCompra,
+        confirmandoCompra,
+        setConfirmandoCompra,
         adicionarAoCarrinho,
         comprar,
+        confirmarCompra,
     }
 }

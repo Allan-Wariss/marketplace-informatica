@@ -4,6 +4,7 @@ import { Login } from './pages/login'
 import { Cadastro } from './pages/cadastro'
 import { CadastrarProduto } from './pages/cadastrar-produto'
 import { Produto } from './pages/produto'
+import { Carrinho } from './pages/carrinho'
 import { PrivateRoute } from './components/PrivateRoute'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         {/* Rotas privadas */}
         <Route element={<PrivateRoute />}>
           <Route path="/cadastrar-produto" element={<CadastrarProduto />} />
+          <Route path="/carrinho" element={<Carrinho />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/home" replace />} />

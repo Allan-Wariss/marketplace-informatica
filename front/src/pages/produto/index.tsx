@@ -22,8 +22,13 @@ export const Produto = () => {
         setConfirmandoDelete,
         loadingDelete,
         handleDelete,
+        loadingCarrinho,
+        loadingCompra,
+        confirmandoCompra,
+        setConfirmandoCompra,
         adicionarAoCarrinho,
         comprar,
+        confirmarCompra,
     } = useProduto()
 
     return (
@@ -187,22 +192,24 @@ export const Produto = () => {
                                     <p className="produto-info__vendedor">Contato: <strong>{product.vendedor?.telefone}</strong></p>
                                     <p className="produto-info__preco">{formatPrice(product.preco)}</p>
 
-                                    <div className="produto-info__acoes">
-                                        <button
-                                            className="produto-btn produto-btn--carrinho"
-                                            onClick={adicionarAoCarrinho}
-                                            disabled={!product.disponivel}
-                                        >
-                                            Adicionar ao Carrinho
-                                        </button>
-                                        <button
-                                            className="produto-btn produto-btn--comprar"
-                                            onClick={comprar}
-                                            disabled={!product.disponivel}
-                                        >
-                                            Comprar Agora
-                                        </button>
-                                    </div>
+                                    {!isOwner && (
+                                        <div className="produto-info__acoes">
+                                            <button
+                                                className="produto-btn produto-btn--carrinho"
+                                                onClick={adicionarAoCarrinho}
+                                                disabled={!product.disponivel || loadingCarrinho}
+                                            >
+                                                {loadingCarrinho ? 'Adicionando...' : 'Adicionar ao Carrinho'}
+                                            </button>
+                                            <button
+                                                className="produto-btn produto-btn--comprar"
+                                                onClick={comprar}
+                                                disabled={!product.disponivel || loadingCompra}
+                                            >
+                                                {!product.disponivel ? 'Indisponível' : 'Comprar Agora'}
+                                            </button>
+                                        </div>
+                                    )}
 
                                     {!product.disponivel && (
                                         <p className="produto-info__indisponivel">Produto indisponível no momento.</p>
@@ -218,6 +225,35 @@ export const Produto = () => {
                             </div>
                         )}
                     </>
+                )}
+
+                {/* Modal de confirmação de compra direta */}
+                {confirmandoCompra && product && (
+                    <div className="produto-modal-overlay">
+                        <div className="produto-modal">
+                            <h3 className="produto-modal__titulo">Confirmar compra?</h3>
+                            <p className="produto-modal__texto">
+                                Você está comprando <strong>{product.titulo}</strong> por{' '}
+                                <strong>{formatPrice(product.preco)}</strong>.
+                            </p>
+                            <div className="produto-modal__acoes">
+                                <button
+                                    className="produto-owner-btn produto-owner-btn--cancelar"
+                                    onClick={() => setConfirmandoCompra(false)}
+                                    disabled={loadingCompra}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    className="produto-owner-btn produto-owner-btn--salvar"
+                                    onClick={confirmarCompra}
+                                    disabled={loadingCompra}
+                                >
+                                    {loadingCompra ? 'Processando...' : 'Confirmar compra'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
         </>

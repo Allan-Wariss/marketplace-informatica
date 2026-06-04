@@ -20,6 +20,12 @@ export class PedidoController {
     return this.pedidoService.getMeusPedidos(req.user.sub);
   }
 
+  @Get('historico')
+  @ApiOperation({ summary: 'Histórico de compras do usuário — todos os pedidos finalizados com dados completos dos produtos' })
+  getHistorico(@Request() req) {
+    return this.pedidoService.getHistorico(req.user.sub);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Ver detalhes de um pedido pelo ID' })
   getPedido(@Param('id') id: string, @Request() req) {

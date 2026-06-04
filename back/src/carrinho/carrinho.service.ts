@@ -25,7 +25,9 @@ export class CarrinhoService {
   }
 
   private async obterOuCriarCarrinho(usuario_id: string) {
-    let carrinho = await this.prisma.carrinho.findFirst({ where: { usuario_id } });
+    let carrinho = await this.prisma.carrinho.findFirst({
+      where: { usuario_id, pedido: { is: null } },
+    });
 
     if (!carrinho) {
       carrinho = await this.prisma.carrinho.create({
@@ -38,7 +40,7 @@ export class CarrinhoService {
 
   async getCarrinho(usuario_id: string) {
     const carrinho = await this.prisma.carrinho.findFirst({
-      where: { usuario_id },
+      where: { usuario_id, pedido: { is: null } },
       include: {
         itens: {
           include: {
@@ -66,6 +68,10 @@ export class CarrinhoService {
       throw new HttpException('Produto indisponível!', HttpStatus.BAD_REQUEST);
     }
 
+    if (produto.vendedor_id === usuario_id) {
+      throw new HttpException('Você não pode comprar o seu próprio produto!', HttpStatus.FORBIDDEN);
+    }
+
     const carrinho = await this.obterOuCriarCarrinho(usuario_id);
 
     const itemExistente = await this.prisma.carrinhoItem.findFirst({
@@ -73,10 +79,8 @@ export class CarrinhoService {
     });
 
     if (itemExistente) {
-      await this.prisma.carrinhoItem.update({
-        where: { id: itemExistente.id },
-        data: { quantidade: itemExistente.quantidade + (addItemDto.quantidade ?? 1) },
-      });
+      // Produto único — cada anúncio representa uma unidade; não incrementa
+      throw new HttpException('Este produto já está no seu carrinho!', HttpStatus.BAD_REQUEST);
     } else {
       await this.prisma.carrinhoItem.create({
         data: {
@@ -137,10 +141,12 @@ export class CarrinhoService {
   }
 
   async limparCarrinho(usuario_id: string) {
-    const carrinho = await this.prisma.carrinho.findFirst({ where: { usuario_id } });
+    const carrinho = await this.prisma.carrinho.findFirst({
+      where: { usuario_id, pedido: { is: null } },
+    });
 
     if (!carrinho) {
-      throw new HttpException('Carrinho não encontrado!', HttpStatus.NOT_FOUND);
+      return { message: 'Carrinho já estava vazio.' };
     }
 
     await this.prisma.carrinhoItem.deleteMany({ where: { carrinho_id: carrinho.id } });
