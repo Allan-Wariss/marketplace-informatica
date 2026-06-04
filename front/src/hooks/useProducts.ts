@@ -1,49 +1,53 @@
 import { useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import type { IProduct } from "../types/IProduct"
 import Products from "../api/products/api"
 
 const TAKE = 12
 
 export const useProducts = () => {
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const query = searchParams.get('q') ?? ''
+    const pageFromUrl = parseInt(searchParams.get('page') ?? '0', 10)
 
     const [products, setProducts] = useState<IProduct[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-    const [page, setPage] = useState<number>(0)
     const [total, setTotal] = useState<number>(0)
 
-    const get = async (skip = 0) => {
+    const fetch = async (q: string, pageIndex: number) => {
         setLoading(true)
         try {
-            const data = await Products.getProducts(skip, TAKE)
+            const data = q
+                ? await Products.searchProducts(q, pageIndex, TAKE)
+                : await Products.getProducts(pageIndex, TAKE)
             setProducts(data.products)
             setTotal(data.total)
-            setPage(skip)
-        } catch (error) {
-            console.log("Nao foi possivel pegar deu um erro ai kakakakakaka")
+        } catch {
+            setProducts([])
+            setTotal(0)
         } finally {
             setLoading(false)
         }
     }
 
     const goToPage = (pageIndex: number) => {
-        get(pageIndex)
+        const next = new URLSearchParams(searchParams)
+        next.set('page', String(pageIndex))
+        setSearchParams(next, { replace: true })
     }
 
-    const nextPage = () => {
-        get(page + 1)
-    }
-
-    const prevPage = () => {
-        get(page - 1)
-    }
+    const nextPage = () => goToPage(pageFromUrl + 1)
+    const prevPage = () => goToPage(pageFromUrl - 1)
 
     const totalPages = Math.ceil(total / TAKE)
-    const currentPage = page
+    const currentPage = pageFromUrl
 
     return {
         products,
         loading,
-        get,
+        query,
+        fetch,
         goToPage,
         nextPage,
         prevPage,

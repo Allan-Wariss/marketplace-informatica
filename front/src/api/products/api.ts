@@ -7,6 +7,11 @@ class Products {
         return response.data;
     }
 
+    async searchProducts(titulo: string, skip: number, take: number): Promise<IProductPage> {
+        const response = await api.get<IProductPage>("/product/search", { params: { titulo, skip, take } })
+        return response.data;
+    }
+
     async createProduct(payload: ICreateProductForm): Promise<IProduct> {
         const response = await api.post<IProduct>('/product', payload)
         return response.data

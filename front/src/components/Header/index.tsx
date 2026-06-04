@@ -1,16 +1,29 @@
 
 
-import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import './style.css'
 
 export const Header = () => {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const [inputValue, setInputValue] = useState(() => searchParams.get('q') ?? '')
 
     const handleLogout = () => {
         logout()
         navigate('/home')
+    }
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault()
+        const q = inputValue.trim()
+        if (q) {
+            navigate(`/home?q=${encodeURIComponent(q)}&page=0`)
+        } else {
+            navigate('/home')
+        }
     }
 
     return (
@@ -19,13 +32,16 @@ export const Header = () => {
                 Informática Place
             </Link>
 
-            <div className="header__search">
+            <form className="header__search" onSubmit={handleSearch}>
                 <input
                     className="header__search-input"
                     type="text"
                     placeholder="Buscar produtos..."
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
                 />
-            </div>
+                <button type="submit" className="header__search-btn">Buscar</button>
+            </form>
 
             <nav className="header__nav">
                 {user ? (

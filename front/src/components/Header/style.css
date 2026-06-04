@@ -29,10 +29,12 @@
 .header__search {
     flex: 1;
     max-width: 480px;
+    display: flex;
+    gap: 8px;
 }
 
 .header__search-input {
-    width: 100%;
+    flex: 1;
     padding: 8px 16px;
     border: none;
     border-radius: 8px;
@@ -50,6 +52,24 @@
 
 .header__search-input:focus {
     background-color: rgba(255, 255, 255, 0.25);
+}
+
+.header__search-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.header__search-btn:hover {
+    background-color: rgba(255, 255, 255, 0.35);
 }
 
 .header__nav {

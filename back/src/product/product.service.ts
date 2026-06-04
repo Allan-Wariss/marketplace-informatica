@@ -42,17 +42,25 @@ export class ProductService {
     return { products, total, skip, take };
   }
 
-  async findOne(titulo: string) {
-    const products = await this.prisma.product.findMany({
-      where: { titulo: { contains: titulo } },
-      include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
-    });
+  async findOne(titulo: string, skip: number, take: number) {
+    const offset = skip * take;
+    const where = { titulo: { contains: titulo } };
+    const [products, total] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        where,
+        skip: offset,
+        take,
+        orderBy: { createdAt: 'desc' },
+        include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
+      }),
+      this.prisma.product.count({ where }),
+    ]);
 
-    if (products.length === 0) {
+    if (total === 0) {
       throw new HttpException('Nenhum produto encontrado!', HttpStatus.NOT_FOUND);
     }
 
-    return products;
+    return { products, total, skip, take };
   }
 
   async update(id: string, vendedor_id: string, updateProductDto: UpdateProductDto) {

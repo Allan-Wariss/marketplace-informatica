@@ -1,77 +1,63 @@
 import { useEffect } from "react"
 import { useProducts } from "../../hooks/useProducts"
-import { formatPrice } from "../../utils/formatPrice"
-import { limitText } from "../../utils/limitText"
+import { ProductCard } from "../ProductCard"
 import "./ListProducts.css"
 
+const pageNumbers = (total: number) => Array.from({ length: total }, (_, index) => index)
+
 export const ListProducts = () => {
-    const { get, loading, products, currentPage, totalPages, goToPage, nextPage, prevPage } = useProducts()
+    const { fetch, loading, products, query, currentPage, totalPages, goToPage, nextPage, prevPage } = useProducts()
 
     useEffect(() => {
-        get(0)
-    }, [])
+        fetch(query, currentPage)
+    }, [query, currentPage])
+
+    const isFirstPage = currentPage === 0
+    const isLastPage = currentPage === totalPages - 1
 
     return (
         <>
+            {query && (
+                <p className="list-products__search-label">
+                    Resultados para: <strong>"{query}"</strong>
+                </p>
+            )}
+
             <div className="list-products">
-                {loading ? (
+                {loading && (
                     <div className="list-products__loading">Carregando...</div>
-                ) : (
-                    products?.map((product) => (
-                        <div key={product.id} className="product-card">
-                            <h1 className="product-card__titulo">{product.titulo}</h1>
-                            {product.imagem ? (
-                                <img
-                                    className="product-card__image"
-                                    src={product.imagem}
-                                    alt={product.titulo}
-                                />
-                            ) : (
-                                <div className="product-card__image-placeholder">
-                                    <div className="product-card__image-icon" aria-hidden="true" />
-                                    <span className="product-card__image-text">Imagem do produto</span>
-                                </div>
-                            )}
-                            <p className="product-card__descricao">{limitText(product.descricao, 22)}</p>
-                            <p className="product-card__categoria">{product.categoria?.nome}</p>
-                            <p className="product-card__disponivel">{product.disponivel}</p>
-                            <p className="product-card__vendedor"> Vendedor: {product?.vendedor?.name || ""}</p>
-                            <p className="product-card__preco">{formatPrice(product.preco)}</p>
-                        </div>
-                    ))
                 )}
+
+                {!loading && products.length === 0 && (
+                    <div className="list-products__empty">Nenhum produto encontrado.</div>
+                )}
+
+                {!loading && products.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
             </div>
 
             {totalPages > 1 && (
                 <nav className="pagination">
-                    <button
-                        className="pagination__btn"
-                        onClick={prevPage}
-                        disabled={currentPage === 0}
-                    >
+                    <button className="pagination__btn" onClick={prevPage} disabled={isFirstPage}>
                         &lsaquo;
                     </button>
 
-                    {Array.from({ length: totalPages }, (_, i) => (
+                    {pageNumbers(totalPages).map((pageIndex) => (
                         <button
-                            key={i}
-                            className={`pagination__btn ${i === currentPage ? 'pagination__btn--active' : ''}`}
-                            onClick={() => goToPage(i)}
+                            key={pageIndex}
+                            className={`pagination__btn ${pageIndex === currentPage ? 'pagination__btn--active' : ''}`}
+                            onClick={() => goToPage(pageIndex)}
                         >
-                            {i + 1}
+                            {pageIndex + 1}
                         </button>
                     ))}
 
-                    <button
-                        className="pagination__btn"
-                        onClick={nextPage}
-                        disabled={currentPage === totalPages - 1}
-                    >
+                    <button className="pagination__btn" onClick={nextPage} disabled={isLastPage}>
                         &rsaquo;
                     </button>
                 </nav>
             )}
         </>
     )
-
 }

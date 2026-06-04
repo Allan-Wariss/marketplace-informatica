@@ -26,11 +26,18 @@ export class ProductController {
     return this.productService.findAll(Number(skip), Number(take));
   }
 
-  @Get('search/:titulo')
+  @Get('search')
   @Public()
-  @ApiOperation({ summary: 'Buscar produtos por título (público)' })
-  findOne(@Param('titulo') titulo: string) {
-    return this.productService.findOne(titulo);
+  @ApiOperation({ summary: 'Buscar produtos por título com paginação (público)' })
+  @ApiQuery({ name: 'titulo', required: true, type: String })
+  @ApiQuery({ name: 'skip', required: false, type: Number })
+  @ApiQuery({ name: 'take', required: false, type: Number })
+  findOne(
+    @Query('titulo') titulo: string,
+    @Query('skip') skip = '0',
+    @Query('take') take = '15',
+  ) {
+    return this.productService.findOne(titulo, Number(skip), Number(take));
   }
 
   @Patch(':id')
