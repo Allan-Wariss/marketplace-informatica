@@ -12,5 +12,7 @@ export class CreateProductDto {
 
     @ApiProperty({ example: 3500.00, description: 'Preço do produto' })
     preco: number;
-  
+
+    @ApiProperty({ example: 'data:image/png;base64,iVBORw0K...', description: 'Imagem do produto em Base64 (opcional)', required: false })
+    imagem?: string;
 }

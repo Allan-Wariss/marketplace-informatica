@@ -10,6 +10,7 @@ export interface IProduct {
   descricao: string;
   preco: number;
   disponivel: boolean;
+  imagem?: string | null;
   vendedor?: IUser;
   categoria?: ICategory;
   carrinhoItens?: ICarrinhoItem[];
