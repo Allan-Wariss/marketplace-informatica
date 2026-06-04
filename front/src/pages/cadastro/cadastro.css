@@ -1,0 +1,123 @@
+.cadastro-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    background-color: #f1f5f9;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.cadastro-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+}
+
+.cadastro-card__title {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.cadastro-card__subtitle {
+    margin: 0 0 32px;
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+.cadastro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cadastro-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cadastro-form__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.cadastro-form__optional {
+    font-weight: 400;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.cadastro-form__input {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #111827;
+    background-color: #f9fafb;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cadastro-form__input:focus {
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    background-color: #ffffff;
+}
+
+.cadastro-form__error {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #b91c1c;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.cadastro-form__submit {
+    margin-top: 4px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #1d4ed8;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cadastro-form__submit:hover:not(:disabled) {
+    background-color: #1e40af;
+}
+
+.cadastro-form__submit:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+}
+
+.cadastro-card__login {
+    margin: 24px 0 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+.cadastro-card__login-link {
+    color: #1d4ed8;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.cadastro-card__login-link:hover {
+    text-decoration: underline;
+}

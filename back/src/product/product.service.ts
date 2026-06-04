@@ -28,10 +28,18 @@ export class ProductService {
     });
   }
 
-  async findAll() {
-    return this.prisma.product.findMany({
-      include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
-    });
+  async findAll(skip: number, take: number) {
+    const offset = skip * take;
+    const [products, total] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        skip: offset,
+        take,
+        orderBy: { createdAt: 'desc' },
+        include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
+      }),
+      this.prisma.product.count(),
+    ]);
+    return { products, total, skip, take };
   }
 
   async findOne(titulo: string) {

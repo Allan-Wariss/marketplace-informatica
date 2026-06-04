@@ -16,3 +16,18 @@ export interface IProduct {
   carrinhoItens?: ICarrinhoItem[];
 }
 
+export interface IProductPage {
+  products: IProduct[];
+  total: number;
+  skip: number;
+  take: number;
+}
+
+export interface ICreateProductForm {
+  categoria_id: string;
+  titulo: string;
+  descricao: string;
+  preco: number;
+  imagem?: string;
+}
+

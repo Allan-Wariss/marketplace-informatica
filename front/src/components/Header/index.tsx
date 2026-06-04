@@ -31,6 +31,7 @@ export const Header = () => {
                 {user ? (
                     <>
                         <span className="header__username">Olá, {user.name}</span>
+                        <Link to="/cadastrar-produto" className="header__nav-link header__nav-link--primary">Cadastrar Produto</Link>
                         <button className="header__logout" onClick={handleLogout}>Sair</button>
                     </>
                 ) : (

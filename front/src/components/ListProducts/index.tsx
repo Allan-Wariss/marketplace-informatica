@@ -5,10 +5,10 @@ import { limitText } from "../../utils/limitText"
 import "./ListProducts.css"
 
 export const ListProducts = () => {
-    const { get, loading, products } = useProducts()
+    const { get, loading, products, currentPage, totalPages, goToPage, nextPage, prevPage } = useProducts()
 
     useEffect(() => {
-        get()
+        get(0)
     }, [])
 
     return (
@@ -41,6 +41,36 @@ export const ListProducts = () => {
                     ))
                 )}
             </div>
+
+            {totalPages > 1 && (
+                <nav className="pagination">
+                    <button
+                        className="pagination__btn"
+                        onClick={prevPage}
+                        disabled={currentPage === 0}
+                    >
+                        &lsaquo;
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                            key={i}
+                            className={`pagination__btn ${i === currentPage ? 'pagination__btn--active' : ''}`}
+                            onClick={() => goToPage(i)}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+
+                    <button
+                        className="pagination__btn"
+                        onClick={nextPage}
+                        disabled={currentPage === totalPages - 1}
+                    >
+                        &rsaquo;
+                    </button>
+                </nav>
+            )}
         </>
     )
 

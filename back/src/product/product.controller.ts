@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Query } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -19,9 +19,11 @@ export class ProductController {
 
   @Get()
   @Public()
-  @ApiOperation({ summary: 'Listar todos os produtos (público)' })
-  findAll() {
-    return this.productService.findAll();
+  @ApiOperation({ summary: 'Listar produtos com paginação (público)' })
+  @ApiQuery({ name: 'skip', required: false, type: Number, description: 'Itens a pular (padrão: 0)' })
+  @ApiQuery({ name: 'take', required: false, type: Number, description: 'Itens por página (padrão: 15)' })
+  findAll(@Query('skip') skip = '0', @Query('take') take = '15') {
+    return this.productService.findAll(Number(skip), Number(take));
   }
 
   @Get('search/:titulo')
