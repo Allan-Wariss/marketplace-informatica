@@ -3,7 +3,217 @@
     background-color: #f1f5f9;
     padding: 40px 24px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 }
+
+/* Barra do dono */
+.produto-owner-bar {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(29, 79, 216, 0.068);
+
+    border-radius: 10px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+}
+
+.produto-owner-bar__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1d4ed8;
+}
+
+.produto-owner-bar__acoes {
+    display: flex;
+    gap: 10px;
+}
+
+.produto-owner-btn {
+    padding: 8px 18px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s, opacity 0.15s;
+}
+
+.produto-owner-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.produto-owner-btn--editar {
+    background-color: #1d4ed8;
+    color: #ffffff;
+}
+
+.produto-owner-btn--editar:hover:not(:disabled) {
+    background-color: #1e40af;
+}
+
+.produto-owner-btn--deletar {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.produto-owner-btn--deletar:hover:not(:disabled) {
+    background-color: #fecaca;
+}
+
+.produto-owner-btn--cancelar {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.produto-owner-btn--cancelar:hover:not(:disabled) {
+    background-color: #e5e7eb;
+}
+
+.produto-owner-btn--salvar {
+    background-color: #16a34a;
+    color: #ffffff;
+}
+
+.produto-owner-btn--salvar:hover:not(:disabled) {
+    background-color: #15803d;
+}
+
+/* Modal de confirmação */
+.produto-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.produto-modal {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.2);
+}
+
+.produto-modal__titulo {
+    margin: 0 0 12px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.produto-modal__texto {
+    margin: 0 0 24px;
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.produto-modal__acoes {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Formulário de edição */
+.produto-edit-form {
+    width: 100%;
+    max-width: 680px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 36px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.produto-edit-form__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.produto-edit-form__titulo {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.produto-edit-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.produto-edit-form__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.produto-edit-form__opcional {
+    font-weight: 400;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.produto-edit-form__input {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    color: #111827;
+    background-color: #f9fafb;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    width: 100%;
+    transition: border-color 0.15s;
+}
+
+.produto-edit-form__input:focus {
+    border-color: #3b82f6;
+    background-color: #fff;
+}
+
+.produto-edit-form__textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.produto-edit-form__preview {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 8px;
+}
+
+.produto-edit-form__file {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
 
 .produto-page__loading,
 .produto-page__error {

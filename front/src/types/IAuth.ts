@@ -1,4 +1,5 @@
 export interface IAuthUser {
+  id: string
   name: string
   email: string
   telefone: string | null
@@ -11,6 +12,7 @@ export interface ILoginPayload {
 }
 
 export interface ILoggedUser {
+  id: string
   name: string
   email: string
   telefone: string | null

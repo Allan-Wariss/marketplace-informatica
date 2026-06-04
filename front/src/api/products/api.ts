@@ -21,6 +21,15 @@ class Products {
         const response = await api.post<IProduct>('/product', payload)
         return response.data
     }
+
+    async updateProduct(id: string, payload: Partial<ICreateProductForm>): Promise<IProduct> {
+        const response = await api.patch<IProduct>(`/product/${id}`, payload)
+        return response.data
+    }
+
+    async deleteProduct(id: string): Promise<void> {
+        await api.delete(`/product/${id}`)
+    }
 }
 
 export default new Products();

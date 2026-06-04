@@ -24,7 +24,7 @@ export const useLogin = () => {
 
     try {
       const { access_token, user } = await AuthApi.login(form)
-      login({ name: user.name, email: user.email, telefone: user.telefone, token: access_token })
+      login({ id: user.id, name: user.name, email: user.email, telefone: user.telefone, token: access_token })
       navigate('/home')
     } catch {
       setError('E-mail ou senha inválidos.')
