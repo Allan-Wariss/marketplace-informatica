@@ -100,3 +100,54 @@ A documentação lista todos os endpoints organizados por módulo:
 ## FRONT-END
 Iniciando o Front-End
 
+### Descrição
+
+Interface web do Marketplace de Informática construída com **React 19 + Vite + TypeScript**.
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/)
+- Back-end rodando em `http://localhost:3000`
+
+### Variáveis de ambiente
+
+Crie o arquivo `front/.env` com base no exemplo abaixo:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+### Instalação
+
+```bash
+cd front
+npm install
+```
+
+### Rodando o projeto
+
+```bash
+# modo desenvolvimento (hot reload)
+npm run dev
+```
+
+A aplicação estará disponível em:
+
+```
+http://localhost:5173
+```
+
+### Build para produção
+
+```bash
+npm run build
+```
+
+### Scripts disponíveis
+
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Inicia o servidor de desenvolvimento |
+| `npm run build` | Gera o build de produção |
+| `npm run preview` | Visualiza o build de produção localmente |
+| `npm run lint` | Executa o linter |
