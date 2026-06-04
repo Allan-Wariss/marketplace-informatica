@@ -1,16 +1,16 @@
 
 ## BACK-END
 Iniciando o Back-End
-## Descrição
+### Descrição
 
 Repositório base do framework [Nest](https://github.com/nestjs/nest) com TypeScript — Marketplace de Informática.
 
-## Pré-requisitos
+### Pré-requisitos
 
 - [Node.js](https://nodejs.org/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## Variáveis de ambiente
+### Variáveis de ambiente
 
 Crie o arquivo `back/.env` com base no exemplo abaixo:
 
@@ -28,7 +28,7 @@ REDIS_PORT=6379
 > node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 > ```
 
-## Redis (Docker)
+### Redis (Docker)
 
 O projeto utiliza Redis para armazenar sessões JWT. Inicie o container antes de rodar a aplicação:
 
@@ -49,13 +49,13 @@ docker logs redis-marketplace
 docker exec -it redis-marketplace redis-cli
 ```
 
-## Instalação
+### Instalação
 
 ```bash
 $ npm install
 ```
 
-## Rodando o projeto
+### Rodando o projeto
 
 ```bash
 # modo desenvolvimento
@@ -68,7 +68,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Documentação da API (Swagger)
+### Documentação da API (Swagger)
 
 Com o servidor rodando, acesse a documentação interativa em:
 
