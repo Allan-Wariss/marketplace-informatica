@@ -12,6 +12,11 @@ class Products {
         return response.data;
     }
 
+    async getProductById(id: string): Promise<IProduct> {
+        const response = await api.get<IProduct>(`/product/${id}`)
+        return response.data
+    }
+
     async createProduct(payload: ICreateProductForm): Promise<IProduct> {
         const response = await api.post<IProduct>('/product', payload)
         return response.data

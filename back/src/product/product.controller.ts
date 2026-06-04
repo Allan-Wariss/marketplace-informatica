@@ -40,6 +40,13 @@ export class ProductController {
     return this.productService.findOne(titulo, Number(skip), Number(take));
   }
 
+  @Get(':id')
+  @Public()
+  @ApiOperation({ summary: 'Buscar produto por ID (público)' })
+  findById(@Param('id') id: string) {
+    return this.productService.findById(id);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar produto (somente o dono)' })
   update(@Param('id') id: string, @Request() req, @Body() updateProductDto: UpdateProductDto) {

@@ -42,6 +42,19 @@ export class ProductService {
     return { products, total, skip, take };
   }
 
+  async findById(id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
+    });
+
+    if (!product) {
+      throw new HttpException('Produto não encontrado!', HttpStatus.NOT_FOUND);
+    }
+
+    return product;
+  }
+
   async findOne(titulo: string, skip: number, take: number) {
     const offset = skip * take;
     const where = { titulo: { contains: titulo } };

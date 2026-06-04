@@ -3,6 +3,7 @@ import { Home } from './pages/home'
 import { Login } from './pages/login'
 import { Cadastro } from './pages/cadastro'
 import { CadastrarProduto } from './pages/cadastrar-produto'
+import { Produto } from './pages/produto'
 import { PrivateRoute } from './components/PrivateRoute'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastrar" element={<Cadastro />} />
+        <Route path="/produto/:id" element={<Produto />} />
 
         {/* Rotas privadas */}
         <Route element={<PrivateRoute />}>

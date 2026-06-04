@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { IProduct } from '../../types/IProduct'
 import { formatPrice } from '../../utils/formatPrice'
 import { limitText } from '../../utils/limitText'
@@ -8,7 +9,7 @@ interface Props {
 }
 
 export const ProductCard = ({ product }: Props) => (
-    <div className="product-card">
+    <Link to={`/produto/${product.id}`} className="product-card">
         <h1 className="product-card__titulo">{product.titulo}</h1>
 
         {product.imagem ? (
@@ -28,5 +29,5 @@ export const ProductCard = ({ product }: Props) => (
         <p className="product-card__categoria">{product.categoria?.nome}</p>
         <p className="product-card__vendedor">Vendedor: {product.vendedor?.name ?? ''}</p>
         <p className="product-card__preco">{formatPrice(product.preco)}</p>
-    </div>
+    </Link>
 )
