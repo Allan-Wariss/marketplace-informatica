@@ -35,7 +35,7 @@ export class ProductService {
         skip: offset,
         take,
         orderBy: { createdAt: 'desc' },
-        include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
+        include: { vendedor: { select: { id: true, name: true, email: true, telefone: true } }, categoria: true },
       }),
       this.prisma.product.count(),
     ]);
@@ -45,7 +45,7 @@ export class ProductService {
   async findById(id: string) {
     const product = await this.prisma.product.findUnique({
       where: { id },
-      include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
+      include: { vendedor: { select: { id: true, name: true, email: true, telefone: true } }, categoria: true },
     });
 
     if (!product) {
@@ -64,7 +64,7 @@ export class ProductService {
         skip: offset,
         take,
         orderBy: { createdAt: 'desc' },
-        include: { vendedor: { select: { id: true, name: true, email: true } }, categoria: true },
+        include: { vendedor: { select: { id: true, name: true, email: true, telefone: true } }, categoria: true },
       }),
       this.prisma.product.count({ where }),
     ]);

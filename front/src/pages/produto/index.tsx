@@ -184,6 +184,7 @@ export const Produto = () => {
                                     <span className="produto-info__categoria">{product.categoria?.nome}</span>
                                     <h1 className="produto-info__titulo">{product.titulo}</h1>
                                     <p className="produto-info__vendedor">Vendido por <strong>{product.vendedor?.name}</strong></p>
+                                    <p className="produto-info__vendedor">Contato: <strong>{product.vendedor?.telefone}</strong></p>
                                     <p className="produto-info__preco">{formatPrice(product.preco)}</p>
 
                                     <div className="produto-info__acoes">
