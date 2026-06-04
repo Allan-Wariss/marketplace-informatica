@@ -108,6 +108,18 @@
 .header__nav-link--cart {
     background-color: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.header__cart-icon {
+    width: 18px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
 }
 
 .header__nav-link--cart:hover {
@@ -133,10 +145,14 @@
     background: transparent;
     cursor: pointer;
     transition: background-color 0.2s;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .header__logout:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(247, 155, 155, 0.301);
+    color: rgb(253, 170, 170);
+    border: 1px solid rgb(253, 170, 170);
 }
 
 @media (max-width: 640px) {
