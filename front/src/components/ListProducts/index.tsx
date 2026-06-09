@@ -6,11 +6,11 @@ import "./ListProducts.css"
 const pageNumbers = (total: number) => Array.from({ length: total }, (_, index) => index)
 
 export const ListProducts = () => {
-    const { fetch, loading, products, query, currentPage, totalPages, goToPage, nextPage, prevPage } = useProducts()
+    const { fetch, loading, products, query, filter, currentPage, totalPages, goToPage, nextPage, prevPage } = useProducts()
 
     useEffect(() => {
         fetch(query, currentPage)
-    }, [query, currentPage])
+    }, [query, filter, currentPage])
 
     const isFirstPage = currentPage === 0
     const isLastPage = currentPage === totalPages - 1

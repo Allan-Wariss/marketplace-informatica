@@ -2,13 +2,13 @@ import type { ICreateProductForm, IProduct, IProductPage } from "../../types/IPr
 import api from "../axios/api";
 
 class Products {
-    async getProducts(skip: number, take: number): Promise<IProductPage> {
-        const response = await api.get<IProductPage>("/product", { params: { skip, take } })
+    async getProducts(skip: number, take: number, filter: 'todos' | 'meus' = 'todos'): Promise<IProductPage> {
+        const response = await api.get<IProductPage>("/product", { params: { skip, take, filter } })
         return response.data;
     }
 
-    async searchProducts(titulo: string, skip: number, take: number): Promise<IProductPage> {
-        const response = await api.get<IProductPage>("/product/search", { params: { titulo, skip, take } })
+    async searchProducts(titulo: string, skip: number, take: number, filter: 'todos' | 'meus' = 'todos'): Promise<IProductPage> {
+        const response = await api.get<IProductPage>("/product/search", { params: { titulo, skip, take, filter } })
         return response.data;
     }
 

@@ -1,0 +1,30 @@
+.filter-chips {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px 0;
+}
+
+.filter-chips__btn {
+    padding: 6px 18px;
+    border: 2px solid #1d4ed8;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background-color: transparent;
+    color: #1d4ed8;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.filter-chips__btn:hover {
+    background-color: #eff6ff;
+}
+
+.filter-chips__btn--active {
+    background-color: #1d4ed8;
+    color: #ffffff;
+}
+
+.filter-chips__btn--active:hover {
+    background-color: #1e40af;
+}

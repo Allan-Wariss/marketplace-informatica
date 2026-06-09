@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Query, UnauthorizedException } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -19,24 +19,41 @@ export class ProductController {
 
   @Get()
   @Public()
-  @ApiOperation({ summary: 'Listar produtos com paginação (público)' })
+  @ApiOperation({ summary: 'Listar produtos com paginação. filter=todos (público) | filter=meus (requer auth)' })
   @ApiQuery({ name: 'skip', required: false, type: Number, description: 'Itens a pular (padrão: 0)' })
   @ApiQuery({ name: 'take', required: false, type: Number, description: 'Itens por página (padrão: 15)' })
-  findAll(@Query('skip') skip = '0', @Query('take') take = '15') {
+  @ApiQuery({ name: 'filter', required: false, enum: ['todos', 'meus'], description: 'Filtro: todos (padrão) ou meus' })
+  findAll(
+    @Request() req,
+    @Query('skip') skip = '0',
+    @Query('take') take = '15',
+    @Query('filter') filter: 'todos' | 'meus' = 'todos',
+  ) {
+    if (filter === 'meus') {
+      if (!req.user) throw new UnauthorizedException('Autenticação necessária para filtrar por seus produtos.');
+      return this.productService.findAll(Number(skip), Number(take), req.user.sub);
+    }
     return this.productService.findAll(Number(skip), Number(take));
   }
 
   @Get('search')
   @Public()
-  @ApiOperation({ summary: 'Buscar produtos por título com paginação (público)' })
+  @ApiOperation({ summary: 'Buscar produtos por título com paginação. filter=todos (público) | filter=meus (requer auth)' })
   @ApiQuery({ name: 'titulo', required: true, type: String })
   @ApiQuery({ name: 'skip', required: false, type: Number })
   @ApiQuery({ name: 'take', required: false, type: Number })
+  @ApiQuery({ name: 'filter', required: false, enum: ['todos', 'meus'] })
   findOne(
+    @Request() req,
     @Query('titulo') titulo: string,
     @Query('skip') skip = '0',
     @Query('take') take = '15',
+    @Query('filter') filter: 'todos' | 'meus' = 'todos',
   ) {
+    if (filter === 'meus') {
+      if (!req.user) throw new UnauthorizedException('Autenticação necessária para filtrar por seus produtos.');
+      return this.productService.findOne(titulo, Number(skip), Number(take), req.user.sub);
+    }
     return this.productService.findOne(titulo, Number(skip), Number(take));
   }
 

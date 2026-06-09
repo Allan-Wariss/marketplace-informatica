@@ -10,6 +10,7 @@ export const useProducts = () => {
 
     const query = searchParams.get('q') ?? ''
     const pageFromUrl = parseInt(searchParams.get('page') ?? '0', 10)
+    const filter = (searchParams.get('filter') ?? 'todos') as 'todos' | 'meus'
 
     const [products, setProducts] = useState<IProduct[]>([])
     const [loading, setLoading] = useState<boolean>(false)
@@ -19,8 +20,8 @@ export const useProducts = () => {
         setLoading(true)
         try {
             const data = q
-                ? await Products.searchProducts(q, pageIndex, TAKE)
-                : await Products.getProducts(pageIndex, TAKE)
+                ? await Products.searchProducts(q, pageIndex, TAKE, filter)
+                : await Products.getProducts(pageIndex, TAKE, filter)
             setProducts(data.products)
             setTotal(data.total)
         } catch {
@@ -47,6 +48,7 @@ export const useProducts = () => {
         products,
         loading,
         query,
+        filter,
         fetch,
         goToPage,
         nextPage,
