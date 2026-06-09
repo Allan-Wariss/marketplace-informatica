@@ -5,7 +5,7 @@ type FilterOption = 'todos' | 'meus'
 
 const CHIPS: { label: string; value: FilterOption }[] = [
     { label: 'Todos', value: 'todos' },
-    { label: 'Meus', value: 'meus' },
+    { label: 'Meu', value: 'meus' },
 ]
 
 export const FilterChips = () => {
