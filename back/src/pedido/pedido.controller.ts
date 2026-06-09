@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Request } from '@nestjs/common';
+import { Controller, Get, Post, Param, Request, Body } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { PedidoService } from './pedido.service';
 
@@ -10,8 +10,8 @@ export class PedidoController {
 
   @Post()
   @ApiOperation({ summary: 'Finalizar compra — cria pedido a partir do carrinho e marca produtos como indisponíveis' })
-  criarPedido(@Request() req) {
-    return this.pedidoService.criarPedido(req.user.sub);
+  criarPedido(@Request() req, @Body() body: { carrinho_id?: string }) {
+    return this.pedidoService.criarPedido(req.user.sub, body?.carrinho_id);
   }
 
   @Get()

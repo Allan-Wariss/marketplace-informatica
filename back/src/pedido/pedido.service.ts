@@ -6,11 +6,19 @@ import { randomUUID } from 'crypto';
 export class PedidoService {
   constructor(private readonly prisma: PrismaService) { }
 
-  async criarPedido(usuario_id: string) {
-    const carrinho = await this.prisma.carrinho.findFirst({
-      where: { usuario_id, pedido: { is: null } },
-      include: { itens: { include: { produto: true } } },
-    });
+  async criarPedido(usuario_id: string, carrinho_id?: string) {
+    let carrinho;
+    if (carrinho_id) {
+      carrinho = await this.prisma.carrinho.findFirst({
+        where: { id: carrinho_id, usuario_id, pedido: { is: null } },
+        include: { itens: { include: { produto: true } } },
+      });
+    } else {
+      carrinho = await this.prisma.carrinho.findFirst({
+        where: { usuario_id, pedido: { is: null } },
+        include: { itens: { include: { produto: true } } },
+      });
+    }
 
     if (!carrinho) {
       throw new HttpException('Carrinho não encontrado!', HttpStatus.NOT_FOUND);
@@ -54,7 +62,7 @@ export class PedidoService {
         this.prisma.category.update({
           where: { id: categoriaId },
           data: {
-            totais_vendas: { increment: quantidade },
+            totais_vendas: { increment: Number(quantidade) },
           },
         }),
       ),
