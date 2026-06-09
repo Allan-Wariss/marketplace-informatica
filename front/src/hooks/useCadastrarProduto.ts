@@ -33,6 +33,19 @@ export const useCadastrarProduto = () => {
             .finally(() => setLoadingCategorias(false))
     }, [])
 
+
+    const getCategorias = async () => {
+        setLoadingCategorias(true)
+        try {
+            const data = await CategoriesApi.getAll()
+            setCategorias(data)
+        } catch (error) {
+            setError('Não foi possível carregar as categorias.')
+        } finally {
+            setLoadingCategorias(false)
+        }
+    }
+
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
     ) => {
@@ -117,6 +130,7 @@ export const useCadastrarProduto = () => {
         loading,
         loadingCategorias,
         error,
+        getCategorias,
         fileInputRef,
         handleChange,
         handleImagemChange,
