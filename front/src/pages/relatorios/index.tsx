@@ -45,6 +45,8 @@ export const Relatorios = () => {
         <>
             <Header />
             <section className="container-relatorios">
+                <h1>Relatório de Vendas</h1>
+                <p className="desc-relatorios">Total de vendas por categoria:</p>
                 <div className="chart-container">
                     <Doughnut data={chartData} />
                 </div>
