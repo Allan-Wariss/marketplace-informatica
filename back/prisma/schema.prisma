@@ -31,6 +31,7 @@ model User {
 model Category {
   id       String    @id @default(uuid())
   nome     String
+  totais_vendas Int     @default(0)
   produtos Product[]
 
   @@map("categorias")

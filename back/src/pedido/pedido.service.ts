@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 
 @Injectable()
 export class PedidoService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async criarPedido(usuario_id: string) {
     const carrinho = await this.prisma.carrinho.findFirst({
@@ -38,6 +38,27 @@ export class PedidoService {
         finalizado: true,
       },
     });
+
+    //Soma a venda da categoria dos produtos vendidos, para relatorio
+    const vendasPorCategoria = carrinho.itens.reduce(
+      (acc, item) => {
+        const categoriaId = item.produto.categoria_id;
+        acc[categoriaId] = (acc[categoriaId] || 0) + item.quantidade;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    await Promise.all(
+      Object.entries(vendasPorCategoria).map(([categoriaId, quantidade]) =>
+        this.prisma.category.update({
+          where: { id: categoriaId },
+          data: {
+            totais_vendas: { increment: quantidade },
+          },
+        }),
+      ),
+    );
 
     await Promise.all(
       carrinho.itens.map((item) =>

@@ -48,6 +48,7 @@ export const Header = () => {
                 {user ? (
                     <>
                         <span className="header__username">Olá, {user.name}</span>
+                        <Link to="/relatorio" className="header__nav-link header__nav-link--primary">Relatórios</Link>
                         <Link to="/cadastrar-produto" className="header__nav-link header__nav-link--primary">Cadastrar Produto</Link>
                         <Link to="/carrinho" className="header__nav-link header__nav-link--cart" title="Meu carrinho">
                             <img src={cartIcon} alt="" className="header__cart-icon" aria-hidden="true" />
