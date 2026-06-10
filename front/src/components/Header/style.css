@@ -133,6 +133,12 @@
     padding: 8px 14px;
     background-color: rgba(255, 255, 255, 0.15);
     border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.header__username:hover {
+    background-color: rgba(255, 255, 255, 0.28);
 }
 
 .header__logout {

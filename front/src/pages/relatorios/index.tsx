@@ -25,7 +25,7 @@ export const Relatorios = () => {
             '#00A3FF',
             '#6BC4B8',
             '#FF8A3D',
-            '#F6F2EE',
+            '#b3b3b3',
             '#2F3A4A',
         ];
         const backgroundColor = labels.map((_, i) => palette[i % palette.length]);
@@ -46,7 +46,7 @@ export const Relatorios = () => {
             <Header />
             <section className="container-relatorios">
                 <h1>Relatório de Vendas</h1>
-                <p className="desc-relatorios">Total de vendas por categoria:</p>
+                <p className="desc-relatorios">Categorias mais vendidas:</p>
                 <div className="chart-container">
                     <Doughnut data={chartData} />
                 </div>
