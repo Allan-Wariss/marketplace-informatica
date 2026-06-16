@@ -114,13 +114,28 @@ export const useCadastrarProduto = () => {
             toast.success('Produto cadastrado com sucesso!')
             navigate('/home')
         } catch (err: any) {
-            const msg = err?.response?.data?.message
-            const errorMsg = typeof msg === 'string' ? msg : 'Erro ao cadastrar produto. Tente novamente.'
-            setError(errorMsg)
-            toast.error(errorMsg)
-        } finally {
+            
+            const backendData = err?.response?.data;
+            let errorMsg = 'Erro ao cadastrar produto. Tente novamente.';
+
+            if (backendData) {
+                
+                if (Array.isArray(backendData.message)) {
+                errorMsg = backendData.message.join(' | ');
+                } 
+
+                else if (typeof backendData.message === 'string') {
+                errorMsg = backendData.message;
+                }
+            } else if (err.message) {
+                errorMsg = err.message;
+            }
+
+            setError(errorMsg);
+            toast.error(errorMsg);
+            } finally {
             setLoading(false)
-        }
+            }
     }
 
     return {
