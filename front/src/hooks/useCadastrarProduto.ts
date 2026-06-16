@@ -117,25 +117,24 @@ export const useCadastrarProduto = () => {
         } catch (err: any) {
             console.error("Erro retornado do Back:", err);
 
-            const data = err?.response?.data;
+            const backendData = err?.response?.data;
             let errorMsg = 'Erro ao cadastrar produto. Tente novamente.';
 
-            if (data) {
-                if (Array.isArray(data.message)) {
-                    errorMsg = data.message.join(', '); // 
-                } 
-                else if (typeof data.message === 'string') {
-                    errorMsg = data.message;
-                } 
-                else if (typeof data.error === 'string') {
-                    errorMsg = data.error;
+            if (backendData) {
+                if (Array.isArray(backendData.message)) {
+                    errorMsg = backendData.message.join(' | ');
+                } else if (typeof backendData.message === 'string') {
+                    errorMsg = backendData.message;
+                } else if (typeof backendData.error === 'string') {
+                    errorMsg = backendData.error;
                 }
+            } else if (err.message) {
+                errorMsg = err.message;
             }
-            
-            setError(errorMsg);
 
+            setError(errorMsg);
             toast.error(errorMsg);
-        } finally { 
+        } finally {
             setLoading(false)
         }
     }
