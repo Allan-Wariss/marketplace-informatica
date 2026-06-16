@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -114,18 +115,18 @@ export const useCadastrarProduto = () => {
             toast.success('Produto cadastrado com sucesso!')
             navigate('/home')
         } catch (err: any) {
-            
+            console.error("Erro retornado do Back:", err);
+
             const backendData = err?.response?.data;
             let errorMsg = 'Erro ao cadastrar produto. Tente novamente.';
 
             if (backendData) {
-                
                 if (Array.isArray(backendData.message)) {
-                errorMsg = backendData.message.join(' | ');
-                } 
-
-                else if (typeof backendData.message === 'string') {
-                errorMsg = backendData.message;
+                    errorMsg = backendData.message.join(' | ');
+                } else if (typeof backendData.message === 'string') {
+                    errorMsg = backendData.message;
+                } else if (typeof backendData.error === 'string') {
+                    errorMsg = backendData.error;
                 }
             } else if (err.message) {
                 errorMsg = err.message;
@@ -133,9 +134,9 @@ export const useCadastrarProduto = () => {
 
             setError(errorMsg);
             toast.error(errorMsg);
-            } finally {
+        } finally {
             setLoading(false)
-            }
+        }
     }
 
     return {
