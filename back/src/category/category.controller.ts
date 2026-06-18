@@ -4,6 +4,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { publicDecrypt } from 'node:crypto';
 
 @ApiTags('Category')
 @ApiBearerAuth()
@@ -23,6 +24,16 @@ export class CategoryController {
   findAll() {
     return this.categoryService.findAll();
   }
+
+  @Get('relatorio/vendas-por-categoria')
+  @Public()
+  @ApiOperation({
+    summary: 'Obter relatório de vendas por categoria (público)',
+  })
+  getVendasPorCategoria() {
+    return this.categoryService.getVendasPorCategoria();
+  }
+
 
   @Get('search/:nome')
   @Public()

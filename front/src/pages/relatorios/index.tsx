@@ -1,24 +1,41 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Header } from "../../components/Header"
-import { useCadastrarProduto } from '../../hooks/useCadastrarProduto'
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import CategoriesApi from '../../api/categories/api'
+import type { ICategory } from '../../types/ICategory'
 import './relatorios.css'
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 export const Relatorios = () => {
-
-    const { getCategorias, categorias } = useCadastrarProduto()
+    const [categorias, setCategorias] = useState<ICategory[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getCategorias()
-        console.log(JSON.stringify(categorias))
+        async function carregarRelatorio() {
+            try {
+                const data = await CategoriesApi.getVendasPorCategoria()
+
+                const categoriasComVenda = data.filter(
+                    (categoria) => Number(categoria.totais_vendas) > 0
+                )
+
+                setCategorias(categoriasComVenda)
+            } catch (error) {
+                console.error('Erro ao carregar relatório:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        carregarRelatorio()
     }, [])
 
     const chartData = useMemo(() => {
-        const labels = categorias.map(c => c.nome || '');
-        const data = categorias.map(c => Number(c.totais_vendas ?? 0));
+        const labels = categorias.map(c => c.nome || '')
+        const data = categorias.map(c => Number(c.totais_vendas ?? 0))
+
         const palette = [
             '#007BFF',
             '#005FCC',
@@ -27,8 +44,10 @@ export const Relatorios = () => {
             '#FF8A3D',
             '#b3b3b3',
             '#2F3A4A',
-        ];
-        const backgroundColor = labels.map((_, i) => palette[i % palette.length]);
+        ]
+
+        const backgroundColor = labels.map((_, i) => palette[i % palette.length])
+
         return {
             labels,
             datasets: [
@@ -38,21 +57,27 @@ export const Relatorios = () => {
                     backgroundColor,
                 },
             ],
-        };
-    }, [categorias]);
+        }
+    }, [categorias])
 
     return (
         <>
             <Header />
+
             <section className="container-relatorios">
                 <h1>Relatório de Vendas</h1>
                 <p className="desc-relatorios">Categorias mais vendidas:</p>
+
                 <div className="chart-container">
-                    <Doughnut data={chartData} />
+                    {loading ? (
+                        <p>Carregando relatório...</p>
+                    ) : categorias.length === 0 ? (
+                        <p>Nenhuma venda finalizada encontrada.</p>
+                    ) : (
+                        <Doughnut data={chartData} />
+                    )}
                 </div>
-                
             </section>
         </>
     )
 }
-

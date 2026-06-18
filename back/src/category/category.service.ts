@@ -39,6 +39,62 @@ export class CategoryService {
     return categories;
   }
 
+  async getVendasPorCategoria() {
+  const categorias = await this.prisma.category.findMany({
+    select: {
+      id: true,
+      nome: true,
+    },
+  });
+
+  const itensVendidos = await this.prisma.carrinhoItem.findMany({
+    where: {
+      carrinho: {
+        pedido: {
+          is: {
+            finalizado: true,
+          },
+        },
+      },
+    },
+    select: {
+      quantidade: true,
+      produto: {
+        select: {
+          categoria_id: true,
+        },
+      },
+    },
+  });
+
+  const vendasPorCategoria = new Map<
+    string,
+    { id: string; nome: string; totais_vendas: number }
+  >();
+
+  for (const categoria of categorias) {
+    vendasPorCategoria.set(categoria.id, {
+      id: categoria.id,
+      nome: categoria.nome,
+      totais_vendas: 0,
+    });
+  }
+
+  for (const item of itensVendidos) {
+    const categoriaId = item.produto.categoria_id;
+    const categoria = vendasPorCategoria.get(categoriaId);
+
+    if (categoria) {
+      categoria.totais_vendas += item.quantidade;
+    }
+  }
+
+  return Array.from(vendasPorCategoria.values()).sort(
+    (a, b) => b.totais_vendas - a.totais_vendas,
+  );
+}
+
+
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.prisma.category.findFirst({ where: { id } });
 
