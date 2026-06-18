@@ -1,9 +1,24 @@
 import { Link } from 'react-router-dom'
 import { useRegister } from '../../hooks/useRegister'
+import { formatPhone } from '../../utils/formatPhone'
 import './cadastro.css'
 
 export const Cadastro = () => {
-    const { form, loading, error, handleChange, handleSubmit } = useRegister()
+    const { form, loading, error, handleChange, handleSubmit, setFieldValue } = useRegister()
+
+    const handleTelefoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key !== 'Backspace' && e.key !== 'Delete') return
+
+        const target = e.currentTarget
+        if (target.selectionStart !== target.value.length || target.selectionEnd !== target.value.length) return
+
+        e.preventDefault()
+
+        const numbers = form.telefone.replace(/\D/g, '')
+        const nextNumbers = numbers.slice(0, -1)
+
+        setFieldValue('telefone', formatPhone(nextNumbers))
+    }
 
     return (
         <div className="cadastro-page">
@@ -65,7 +80,17 @@ export const Cadastro = () => {
                             type="tel"
                             placeholder="(11) 99999-9999"
                             value={form.telefone}
-                            onChange={handleChange}
+                            onChange={(e) =>
+                                handleChange({
+                                    ...e,
+                                    target: {
+                                        ...e.target,
+                                        name: 'telefone',
+                                        value: formatPhone(e.target.value),
+                                    },
+                                } as React.ChangeEvent<HTMLInputElement>)
+                            }
+                            onKeyDown={handleTelefoneKeyDown}
                         />
                     </div>
 

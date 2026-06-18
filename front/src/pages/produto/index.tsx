@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Header } from '../../components/Header'
 import { useProduto } from '../../hooks/useProduto'
+import { formatPhone } from '../../utils/formatPhone'
 import { formatPrice } from '../../utils/formatPrice'
 import './produto.css'
 
@@ -189,7 +190,7 @@ export const Produto = () => {
                                     <span className="produto-info__categoria">{product.categoria?.nome}</span>
                                     <h1 className="produto-info__titulo">{product.titulo}</h1>
                                     <p className="produto-info__vendedor">Vendido por <strong>{product.vendedor?.name}</strong></p>
-                                    <p className="produto-info__vendedor">Contato: <strong>{product.vendedor?.telefone}</strong></p>
+                                    <p className="produto-info__vendedor">Contato: <strong>{formatPhone(product.vendedor?.telefone ?? '')}</strong></p>
                                     <p className="produto-info__preco">{formatPrice(product.preco)}</p>
 
                                     {!isOwner && (
