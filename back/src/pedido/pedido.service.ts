@@ -47,26 +47,8 @@ export class PedidoService {
       },
     });
 
-    //Soma a venda da categoria dos produtos vendidos, para relatorio
-    const vendasPorCategoria = carrinho.itens.reduce(
-      (acc, item) => {
-        const categoriaId = item.produto.categoria_id;
-        acc[categoriaId] = (acc[categoriaId] || 0) + item.quantidade;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-
-    await Promise.all(
-      Object.entries(vendasPorCategoria).map(([categoriaId, quantidade]) =>
-        this.prisma.category.update({
-          where: { id: categoriaId },
-          data: {
-            totais_vendas: { increment: Number(quantidade) },
-          },
-        }),
-      ),
-    );
+    //Soma a venda da categoria dos produtos vendidos, para relatorio (APAGUEI UM NGC AQ)
+    
 
     await Promise.all(
       carrinho.itens.map((item) =>

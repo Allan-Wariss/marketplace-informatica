@@ -1,24 +1,27 @@
 import { useEffect, useMemo } from "react"
 import { Header } from "../../components/Header"
-import { useCadastrarProduto } from '../../hooks/useCadastrarProduto'
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useProducts } from "../../hooks/useProducts"
+import { Doughnut } from 'react-chartjs-2'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import './relatorios.css'
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 export const Relatorios = () => {
-
-    const { getCategorias, categorias } = useCadastrarProduto()
+    const {
+        categoriasRelatorio,
+        loadingRelatorio,
+        carregarRelatorio,
+    } = useProducts()
 
     useEffect(() => {
-        getCategorias()
-        console.log(JSON.stringify(categorias))
+        carregarRelatorio()
     }, [])
 
     const chartData = useMemo(() => {
-        const labels = categorias.map(c => c.nome || '');
-        const data = categorias.map(c => Number(c.totais_vendas ?? 0));
+        const labels = categoriasRelatorio.map(c => c.nome || '')
+        const data = categoriasRelatorio.map(c => Number(c.totais_vendas ?? 0))
+
         const palette = [
             '#007BFF',
             '#005FCC',
@@ -27,8 +30,10 @@ export const Relatorios = () => {
             '#FF8A3D',
             '#b3b3b3',
             '#2F3A4A',
-        ];
-        const backgroundColor = labels.map((_, i) => palette[i % palette.length]);
+        ]
+
+        const backgroundColor = labels.map((_, i) => palette[i % palette.length])
+
         return {
             labels,
             datasets: [
@@ -38,21 +43,27 @@ export const Relatorios = () => {
                     backgroundColor,
                 },
             ],
-        };
-    }, [categorias]);
+        }
+    }, [categoriasRelatorio])
 
     return (
         <>
             <Header />
+
             <section className="container-relatorios">
                 <h1>Relatório de Vendas</h1>
                 <p className="desc-relatorios">Categorias mais vendidas:</p>
+
                 <div className="chart-container">
-                    <Doughnut data={chartData} />
+                    {loadingRelatorio ? (
+                        <p>Carregando relatório...</p>
+                    ) : categoriasRelatorio.length === 0 ? (
+                        <p>Nenhuma venda finalizada encontrada.</p>
+                    ) : (
+                        <Doughnut data={chartData} />
+                    )}
                 </div>
-                
             </section>
         </>
     )
 }
-
