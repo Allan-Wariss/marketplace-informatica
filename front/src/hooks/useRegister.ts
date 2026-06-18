@@ -20,6 +20,11 @@ export const useRegister = () => {
         setError(null)
     }
 
+    const setFieldValue = (name: string, value: string) => {
+        setForm((prev) => ({ ...prev, [name]: value }))
+        setError(null)
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
@@ -38,5 +43,5 @@ export const useRegister = () => {
         }
     }
 
-    return { form, loading, error, handleChange, handleSubmit }
+    return { form, loading, error, handleChange, handleSubmit, setFieldValue }
 }

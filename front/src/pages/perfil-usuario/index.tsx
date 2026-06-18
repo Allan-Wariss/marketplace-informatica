@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { Header } from "../../components/Header";
 import { usePerfilUsuario } from "../../hooks/usePerfilUsuario";
+import { formatPhone } from "../../utils/formatPhone";
 import "./perfil-usuario.css";
 
 export const PerfilUsuario = () => {
@@ -14,29 +15,26 @@ export const PerfilUsuario = () => {
     error,
     success,
     handleChange,
+    setFieldValue,
     handleSubmit,
     handleDelete,
   } = usePerfilUsuario();
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const formatPhone = (value: string) => {
-    const numbers = value.replace(/\D/g, "").slice(0, 11);
+  const handleTelefoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Backspace' && e.key !== 'Delete') return
 
-    if (numbers.length <= 2) {
-      return numbers;
-    }
+    const target = e.currentTarget
+    if (target.selectionStart !== target.value.length || target.selectionEnd !== target.value.length) return
 
-    if (numbers.length <= 7) {
-      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
-    }
+    e.preventDefault()
 
-    if (numbers.length <= 10) {
-      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`;
-    }
+    const numbers = form.telefone?.replace(/\D/g, '') ?? ''
+    const nextNumbers = numbers.slice(0, -1)
 
-    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7)}`;
-  };
+    setFieldValue('telefone', formatPhone(nextNumbers))
+  }
 
   const onSubmit = async (e: React.FormEvent) => {
     await handleSubmit(e);
@@ -127,6 +125,7 @@ export const PerfilUsuario = () => {
                       },
                     } as React.ChangeEvent<HTMLInputElement>);
                   }}
+                  onKeyDown={handleTelefoneKeyDown}
                   disabled={saving}
                 />
               </div>

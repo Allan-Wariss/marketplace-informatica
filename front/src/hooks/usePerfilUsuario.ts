@@ -45,6 +45,12 @@ export const usePerfilUsuario = () => {
         setSuccess(false)
     }
 
+    const setFieldValue = (name: string, value: string) => {
+        setForm((prev) => ({ ...prev, [name]: value }))
+        setError(null)
+        setSuccess(false)
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setSaving(true)
@@ -86,5 +92,5 @@ export const usePerfilUsuario = () => {
         }
     }
 
-    return { user, form, loading, saving, deleting, error, success, handleChange, handleSubmit, handleDelete }
+    return { user, form, loading, saving, deleting, error, success, handleChange, setFieldValue, handleSubmit, handleDelete }
 }
