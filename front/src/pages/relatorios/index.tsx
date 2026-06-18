@@ -1,40 +1,26 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { Header } from "../../components/Header"
+import { useProducts } from "../../hooks/useProducts"
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import CategoriesApi from '../../api/categories/api'
-import type { ICategory } from '../../types/ICategory'
 import './relatorios.css'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 export const Relatorios = () => {
-    const [categorias, setCategorias] = useState<ICategory[]>([])
-    const [loading, setLoading] = useState(true)
+    const {
+        categoriasRelatorio,
+        loadingRelatorio,
+        carregarRelatorio,
+    } = useProducts()
 
     useEffect(() => {
-        async function carregarRelatorio() {
-            try {
-                const data = await CategoriesApi.getVendasPorCategoria()
-
-                const categoriasComVenda = data.filter(
-                    (categoria) => Number(categoria.totais_vendas) > 0
-                )
-
-                setCategorias(categoriasComVenda)
-            } catch (error) {
-                console.error('Erro ao carregar relatório:', error)
-            } finally {
-                setLoading(false)
-            }
-        }
-
         carregarRelatorio()
     }, [])
 
     const chartData = useMemo(() => {
-        const labels = categorias.map(c => c.nome || '')
-        const data = categorias.map(c => Number(c.totais_vendas ?? 0))
+        const labels = categoriasRelatorio.map(c => c.nome || '')
+        const data = categoriasRelatorio.map(c => Number(c.totais_vendas ?? 0))
 
         const palette = [
             '#007BFF',
@@ -58,7 +44,7 @@ export const Relatorios = () => {
                 },
             ],
         }
-    }, [categorias])
+    }, [categoriasRelatorio])
 
     return (
         <>
@@ -69,9 +55,9 @@ export const Relatorios = () => {
                 <p className="desc-relatorios">Categorias mais vendidas:</p>
 
                 <div className="chart-container">
-                    {loading ? (
+                    {loadingRelatorio ? (
                         <p>Carregando relatório...</p>
-                    ) : categorias.length === 0 ? (
+                    ) : categoriasRelatorio.length === 0 ? (
                         <p>Nenhuma venda finalizada encontrada.</p>
                     ) : (
                         <Doughnut data={chartData} />
