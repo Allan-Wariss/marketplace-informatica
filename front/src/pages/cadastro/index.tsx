@@ -78,7 +78,7 @@ export const Cadastro = () => {
                             id="telefone"
                             name="telefone"
                             type="tel"
-                            placeholder="(11) 99999-9999"
+                            placeholder="(xx).x-xxxx-xxxx"
                             value={form.telefone}
                             onChange={(e) =>
                                 handleChange({

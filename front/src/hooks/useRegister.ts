@@ -30,6 +30,13 @@ export const useRegister = () => {
         setLoading(true)
         setError(null)
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(form.email)) {
+            setError('Informe um e-mail válido.')
+            setLoading(false)
+            return
+        }
+
         try {
             const payload: IRegisterForm = { ...form }
             if (!payload.telefone) delete payload.telefone
