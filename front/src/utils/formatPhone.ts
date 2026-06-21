@@ -9,14 +9,14 @@ export function formatPhone(value: string): string {
   const local = numbers.slice(2)
 
   if (!local) return `(${area})`
-  if (local.length <= 1) return `(${area}) ${local}`
-  if (local.length <= 4) return `(${area}) ${local.slice(0, 1)}.${local.slice(1)}`
+  if (local.length <= 1) return `(${area}).${local}`
+  if (local.length <= 5) return `(${area}).${local.slice(0, 1)}-${local.slice(1)}`
 
   const prefix = local.slice(0, 1)
   const middle = local.slice(1, 5)
   const suffix = local.slice(5)
 
   return suffix
-    ? `(${area}) ${prefix}.${middle}-${suffix}`
-    : `(${area}) ${prefix}.${middle}`
+    ? `(${area}).${prefix}-${middle}-${suffix}`
+    : `(${area}).${prefix}-${middle}`
 }
