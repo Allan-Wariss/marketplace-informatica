@@ -106,6 +106,7 @@ export class ProductService {
       throw new HttpException('Você não tem permissão para remover este produto!', HttpStatus.FORBIDDEN);
     }
 
+    await this.prisma.carrinhoItem.deleteMany({ where: { produto_id: id } });
     await this.prisma.product.delete({ where: { id } });
     return { message: 'Produto removido com sucesso!' };
   }

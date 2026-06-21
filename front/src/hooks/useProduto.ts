@@ -109,8 +109,9 @@ export const useProduto = () => {
             await ProductsApi.deleteProduct(id)
             toast.success('Produto removido.')
             navigate('/home')
-        } catch {
-            toast.error('Erro ao remover produto.')
+        } catch (err: any) {
+            const msg = err?.response?.data?.message
+            toast.error(typeof msg === 'string' ? msg : 'Erro ao remover produto.')
         } finally {
             setLoadingDelete(false)
             setConfirmandoDelete(false)
