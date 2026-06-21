@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UsersApi, { type IUpdateProfileForm } from '../api/users/api'
 import type { IUser } from '../types/IUser'
 import { useAuth } from './useAuth'
+
+// NOVO: regex simples de validação de email
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export const usePerfilUsuario = () => {
     const { login, logout, user: authUser } = useAuth()
@@ -39,10 +42,24 @@ export const usePerfilUsuario = () => {
         return () => { cancelled = true }
     }, [])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-        setError(null)
+    // NOVO: função de validação reutilizável
+    const isValidEmail = (value: string) => EMAIL_REGEX.test(value.trim())
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setForm((prev) => ({ ...prev, [name]: value }))
         setSuccess(false)
+
+        // NOVO: valida o email em tempo real, sem travar a digitação
+        if (name === 'email') {
+            if (value && !isValidEmail(value)) {
+                setError('Digite um e-mail válido')
+            } else {
+                setError(null)
+            }
+        } else {
+            setError(null)
+        }
     }
 
     const setFieldValue = (name: string, value: string) => {
@@ -51,8 +68,15 @@ export const usePerfilUsuario = () => {
         setSuccess(false)
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+
+        // NOVO: validação final antes de enviar pra API
+        if (!form.email || !isValidEmail(form.email)) {
+            setError('Digite um e-mail válido antes de salvar')
+            return
+        }
+
         setSaving(true)
         setError(null)
         setSuccess(false)
@@ -66,7 +90,6 @@ export const usePerfilUsuario = () => {
                 email: updated.email,
                 telefone: updated.telefone ?? '',
             })
-            // Sincroniza o localStorage com os novos dados
             if (authUser) {
                 login({ ...authUser, name: updated.name, email: updated.email, telefone: updated.telefone ?? null })
             }
